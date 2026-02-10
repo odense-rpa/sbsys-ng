@@ -47,7 +47,7 @@ class SbsysClient:
         self._password = password
         self._token: str = ""
         self._token_expires: datetime = datetime(2000, 1, 1, tzinfo=timezone.utc)
-        self._http = httpx.AsyncClient()
+        self._http = httpx.AsyncClient(verify=False)
         self._skabeloner: list[Skabelon] | None = None
 
     # ------------------------------------------------------------------
@@ -79,7 +79,8 @@ class SbsysClient:
                 "password": self._password,
             },
         )
-        if response.status_code != 200:
+        content_type = response.headers.get("content-type", "")
+        if response.status_code != 200 or "json" not in content_type:
             raise SbsysAuthenticationError(
                 f"Token request failed ({response.status_code}): {response.text}"
             )

@@ -4,6 +4,7 @@ import pytest
 from dotenv import load_dotenv
 
 from sbsys import SbsysClient
+from sbsys.manager import SbsysClientManager
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ def client():
     if missing:
         pytest.skip(f"Missing environment variables: {', '.join(missing)}")
 
-    return SbsysClient(
+    return SbsysClientManager(
         base_url=base_url,
         token_url=token_url,
         client_id=client_id,
@@ -37,3 +38,13 @@ def client():
         username=username,
         password=password,
     )
+
+@pytest.fixture
+def sbsys_manager(client):
+    return client
+
+@pytest.fixture
+def sbsys_client(client):
+    return client.client
+
+

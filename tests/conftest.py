@@ -45,6 +45,6 @@ def sbsys_manager(client):
 
 @pytest.fixture
 def sbsys_client(client):
-    return client.client
+    return client
 
 

@@ -3,10 +3,75 @@ from sbsys import SbsysClient
 
 async def test_hent_sager(sbsys_manager: SbsysClientManager):
     async with sbsys_manager:
-        response = await sbsys_manager.sager.hent_sager("111111-1111")
+        response = await sbsys_manager.sager.hent_sager_på_borger("111111-1111")
     assert response is not None
 
 async def test_hent_sager_client(sbsys_client: SbsysClient):
     async with sbsys_client:
         response = await sbsys_client.hent_sager("111111-1111")
     assert response is not None
+
+async def test_hent_statusliste(sbsys_manager: SbsysClientManager):
+    async with sbsys_manager:
+        response = await sbsys_manager.sager.hent_statusliste_for_sager()
+    assert response is not None
+    assert len(response) == 4
+
+async def test_opret_sag(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_skabelon_id = 332
+    test_init = "roboa"
+    test_titel = "Test Titel"
+
+    async with sbsys_manager:
+        borger = await sbsys_manager.borger.hent_borger(test_cpr)
+        skabelon = await sbsys_manager.sagsskabeloner.hent_sagsskabelon(test_skabelon_id)
+        bruger = await sbsys_manager.bruger.find_brugere(test_init)
+
+        assert len(bruger) == 1
+        bruger = bruger[0]
+
+        response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
+
+    assert response is not None
+    assert response["SagsTitel"] == test_titel
+    assert response["PrimaryPart"]["CPRnummer"] == test_cpr
+
+async def test_søg_sager(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_titel = "Test Titel"
+
+    async with sbsys_manager:
+        response = await sbsys_manager.sager.søg_sager(
+            {
+                "PrimaerPerson":{
+                    "CprNummer":test_cpr
+                },
+                "Titel": test_titel
+            }
+        )
+    
+    assert response is not None
+    assert response[0]["SagsTitel"] == test_titel
+
+async def test_opdater_sag(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_titel = "Test Titel"
+    ny_titel = "Ny test titel"
+
+    async with sbsys_manager:
+        sager = await sbsys_manager.sager.søg_sager(
+            {
+                "PrimaerPerson":{
+                    "CprNummer":test_cpr
+                },
+                "Titel": test_titel
+            }
+        )
+
+        response = await sbsys_manager.sager.opdater_sag(sager[0]["SagIdentity"],{
+            "Sagstitel":ny_titel
+        })
+    
+    assert response is not None
+    assert response["SagsTitel"] == ny_titel

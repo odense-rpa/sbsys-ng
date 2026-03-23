@@ -10,6 +10,9 @@ from typing import Optional
 
 from .client import SbsysClient
 from .functionality.sager import SagerClient
+from .functionality.borger import BorgerClient
+from .functionality.sagsskabeloner import SkabelonClient
+from .functionality.bruger import BrugerClient
 
 
 class SbsysClientManager:
@@ -63,6 +66,9 @@ class SbsysClientManager:
 
         self._client: Optional[SbsysClient] = None
         self._sager_client: Optional[SagerClient] = None
+        self._borger_client: Optional[BorgerClient] = None
+        self._sagsskabeloner_client: Optional[SkabelonClient] = None
+        self._bruger_client: Optional[BrugerClient] = None
 
     @property
     def client(self) -> SbsysClient:
@@ -90,3 +96,21 @@ class SbsysClientManager:
         if self._sager_client is None:
             self._sager_client = SagerClient(self.client)
         return self._sager_client
+
+    @property
+    def borger(self) -> BorgerClient:
+        if self._borger_client is None:
+            self._borger_client = BorgerClient(self.client)
+        return self._borger_client
+    
+    @property
+    def sagsskabeloner(self) -> SkabelonClient:
+        if self._sagsskabeloner_client is None:
+            self._sagsskabeloner_client = SkabelonClient(self.client)
+        return self._sagsskabeloner_client
+
+    @property
+    def bruger(self) -> BrugerClient:
+        if self._bruger_client is None:
+            self._bruger_client = BrugerClient(self.client)
+        return self._bruger_client

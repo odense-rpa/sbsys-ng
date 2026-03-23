@@ -75,3 +75,43 @@ async def test_opdater_sag(sbsys_manager: SbsysClientManager):
     
     assert response is not None
     assert response["SagsTitel"] == ny_titel
+
+async def test_hent_sagsparter(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_titel = "Test Titel"
+
+    async with sbsys_manager:
+        sager = await sbsys_manager.sager.søg_sager(
+            {
+                "PrimaerPerson":{
+                    "CprNummer":test_cpr
+                },
+                "Titel": test_titel
+            }
+        )
+
+        response = await sbsys_manager.sager.hent_sagsparter(sager[0]["SagIdentity"])
+    
+    assert response is not None
+
+async def test_tilføj_sagspart(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_cpr_2 = "222222-2222"
+    test_titel = "Test Titel"
+
+    async with sbsys_manager:
+        sager = await sbsys_manager.sager.søg_sager(
+            {
+                "PrimaerPerson":{
+                    "CprNummer":test_cpr
+                },
+                "Titel": test_titel
+            }
+        )
+
+        borger = await sbsys_manager.borger.hent_borger(test_cpr_2)
+
+        response = await sbsys_manager.sager.tilføj_sagspart(sager[0]["SagIdentity"], borger["Id"], "Test part", True, test_cpr_2)
+
+    assert response is True
+

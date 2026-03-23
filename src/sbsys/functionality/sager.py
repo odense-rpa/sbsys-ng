@@ -61,3 +61,29 @@ class SagerClient:
         data = await self.client._get(endpoint)
 
         return data
+    
+    async def hent_sagsparter(self, sags_id: str) -> dict:
+        endpoint = f"api/sag/{sags_id}/part"
+
+        response = await self.client._get(endpoint)
+
+        return response
+    
+    async def tilføj_sagspart(self, sags_id:str, part_id:str, navn:str, person_part:bool = True, cpr:str = "", cvr:str ="") -> dict:
+        endpoint = f"api/sag/{sags_id}/part"
+        
+        query = {
+            "PartId":part_id,
+            "Navn":navn,
+        }
+
+        if person_part:
+            query["PartType"] = "Person"
+            query["Cprnummer"] = cpr
+        else:
+            query["PartType"] = "Firma"
+            query["Cvrnummer"] = cvr
+        
+        response = await self.client._post(endpoint, query)
+
+        return response

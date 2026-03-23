@@ -114,4 +114,3 @@ async def test_tilføj_sagspart(sbsys_manager: SbsysClientManager):
         response = await sbsys_manager.sager.tilføj_sagspart(sager[0]["SagIdentity"], borger["Id"], "Test part", True, test_cpr_2)
 
     assert response is True
-

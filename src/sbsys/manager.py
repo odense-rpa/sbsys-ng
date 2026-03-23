@@ -13,6 +13,7 @@ from .functionality.sager import SagerClient
 from .functionality.borger import BorgerClient
 from .functionality.sagsskabeloner import SkabelonClient
 from .functionality.bruger import BrugerClient
+from .functionality.journalnotater import JournalnotatClient
 
 
 class SbsysClientManager:
@@ -69,6 +70,7 @@ class SbsysClientManager:
         self._borger_client: Optional[BorgerClient] = None
         self._sagsskabeloner_client: Optional[SkabelonClient] = None
         self._bruger_client: Optional[BrugerClient] = None
+        self._journalnotat_client: Optional[JournalnotatClient] = None
 
     @property
     def client(self) -> SbsysClient:
@@ -114,3 +116,9 @@ class SbsysClientManager:
         if self._bruger_client is None:
             self._bruger_client = BrugerClient(self.client)
         return self._bruger_client
+
+    @property
+    def journalnotater(self) -> JournalnotatClient:
+        if self._journalnotat_client is None:
+            self._journalnotat_client = JournalnotatClient(self.client)
+        return self._journalnotat_client

@@ -19,3 +19,20 @@ class BorgerClient:
             return None
 
         return response[0]
+    
+    async def opret_borger(self, cpr:str, body:dict = {}) -> dict:
+
+        borger = await self.hent_borger(cpr)
+
+        if borger is not None:
+            return borger
+        
+        endpoint = "/api/person"
+
+        body = body
+
+        body["CprNummer"] = cpr
+
+        response = await self.client._post(endpoint, body)
+
+        return response

@@ -30,8 +30,10 @@ async def test_opret_sag(sbsys_manager: SbsysClientManager):
 
         assert len(bruger) == 1
         bruger = bruger[0]
-
-        response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
+        
+        #Kommenteret ud for at forhindre fejl opret i drift
+        #response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
+        response = None
 
     assert response is not None
     assert response["SagsTitel"] == test_titel
@@ -111,6 +113,8 @@ async def test_tilføj_sagspart(sbsys_manager: SbsysClientManager):
 
         borger = await sbsys_manager.borger.hent_borger(test_cpr_2)
 
-        response = await sbsys_manager.sager.tilføj_sagspart(sager[0]["SagIdentity"], borger["Id"], "Test part", True, test_cpr_2)
+        #Kommenteret ud for at forhindre fejl opret i drift
+        #response = await sbsys_manager.sager.tilføj_sagspart(sager[0]["SagIdentity"], borger["Id"], "Test part", True, test_cpr_2)
+        response = None
 
     assert response is True

@@ -15,10 +15,12 @@ async def test_opret_journalnotater(sbsys_manager: SbsysClientManager):
     notat_indhold = ("Dette er en test\n"
                       "på flere linjer\n"
                       "for at se om det virker")
-
-    async with sbsys_manager:
-        response = await sbsys_manager.journalnotater.opret_journalnotater(sags_id, notat_overskrift, notat_indhold)
     
+    
+    async with sbsys_manager:
+        #  response = await sbsys_manager.journalnotater.opret_journalnotater(sags_id, notat_overskrift, notat_indhold)
+        response = None
+    #Kommenteret ud, for at undgå man kommer til at oprette i drift.
     assert response is not None
     assert response["Overskrift"] == notat_overskrift
     

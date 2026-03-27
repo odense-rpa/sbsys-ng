@@ -21,7 +21,7 @@ async def test_opret_sag(sbsys_manager: SbsysClientManager):
     test_cpr = "111111-1111"
     test_skabelon_id = 332
     test_init = "roboa"
-    test_titel = "Test Titel"
+    test_titel = "Tester Titel"
 
     async with sbsys_manager:
         borger = await sbsys_manager.borger.hent_borger(test_cpr)
@@ -32,8 +32,8 @@ async def test_opret_sag(sbsys_manager: SbsysClientManager):
         bruger = bruger[0]
         
         #Kommenteret ud for at forhindre fejl opret i drift
-        #response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
-        response = None
+        response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
+        # response = None
 
     assert response is not None
     assert response["SagsTitel"] == test_titel
@@ -58,8 +58,8 @@ async def test_søg_sager(sbsys_manager: SbsysClientManager):
 
 async def test_opdater_sag(sbsys_manager: SbsysClientManager):
     test_cpr = "111111-1111"
-    test_titel = "Test Titel"
-    ny_titel = "Ny test titel"
+    test_titel = "Tester titel"
+    ny_titel = "3Ny test 3titel3"
 
     async with sbsys_manager:
         sager = await sbsys_manager.sager.søg_sager(
@@ -71,9 +71,11 @@ async def test_opdater_sag(sbsys_manager: SbsysClientManager):
             }
         )
 
-        response = await sbsys_manager.sager.opdater_sag(sager[0]["SagIdentity"],{
-            "Sagstitel":ny_titel
-        })
+        body = {
+            "SagsTitel": ny_titel
+        } 
+        
+        response = await sbsys_manager.sager.opdater_sag(sager[0]["Id"],body)
     
     assert response is not None
     assert response["SagsTitel"] == ny_titel

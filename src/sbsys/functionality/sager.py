@@ -1,4 +1,5 @@
 from sbsys.client import SbsysClient
+from sbsys.exceptions import SbsysValidationError
 from sbsys.models import Sag
 
 
@@ -15,6 +16,13 @@ class SagerClient:
             }
         response = await self.client._post(endpoint, body)
         return response["Results"]
+    
+    async def hent_sag(self, sags_id:str) -> dict:
+        endpoint = f"api/sag/{sags_id}"
+
+        response = await self.client._get(endpoint)
+
+        return response
 
     async def søg_sager(self, query: dict = {}) -> list[dict]:
         body = query
@@ -49,11 +57,27 @@ class SagerClient:
 
         return await self.client._post(endpoint, body)
     
-    async def opdater_sag(self,  sags_id:str, query: dict) -> dict:
+    async def opdater_sag(self, sags_id: str, body: dict) -> dict:
+        # Hent en sag og opdater værdierne og send den med her for at opdatere den
         endpoint = f"api/sag/{sags_id}"
 
-        opdateret_sag = await self.client._put(endpoint, query)
+        if not body:
+            raise SbsysValidationError("opdateret_sag må ikke være en tom")
+
+        # Vi henter sagen, det gør vi fordi at nogle gange matcher felter ikke hvis sagen f.eks. er hentet gennem search
+        sag = await self.hent_sag(sags_id)
         
+        # Vi opdatere felter i sagen med dem angivet i body
+        # Det gør vi fordi der er fejl i endpointet der betyder at den kan fjerne tilknytning til part og sagsnøglen hvis den ikke får hele sagen med.
+        # Fejlen er meldt ind.
+        for key in body:
+            if key in sag:
+                
+                sag[key] = body[key]
+            else:
+                raise ValueError(f"Fejl {key} feltet kan ikke findes i sagen")
+
+        opdateret_sag = await self.client._put(endpoint, sag)
         return opdateret_sag
     
     async def hent_statusliste_for_sager(self) -> dict:

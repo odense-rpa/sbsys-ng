@@ -5,13 +5,8 @@ from sbsys.client import SbsysClient
 
 def tekst_til_html(tekst: str) -> str:
     linjer = tekst.split("\n")
-    body = "".join(
-        f'<span>{escape(linje)}</span></p>'
-        for linje in linjer
-    )
-    return (
-        f'\t<body>\r\n\t\t{body}</body>\r\n'
-    )
+    body = "".join(f"{escape(linje)}<br/>" for linje in linjer)
+    return body
 
 
 class JournalnotatClient:

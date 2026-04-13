@@ -62,14 +62,13 @@ class SagerClient:
         endpoint = f"api/sag/{sags_id}"
 
         if not body:
-            raise SbsysValidationError("opdateret_sag må ikke være en tom")
+            raise SbsysValidationError("body må ikke være en tom")
 
         # Vi henter sagen, det gør vi fordi at nogle gange matcher felter ikke hvis sagen f.eks. er hentet gennem search
         sag = await self.hent_sag(sags_id)
         
         # Vi opdatere felter i sagen med dem angivet i body
-        # Det gør vi fordi der er fejl i endpointet der betyder at den kan fjerne tilknytning til part og sagsnøglen hvis den ikke får hele sagen med.
-        # Fejlen er meldt ind.
+        # Vi gør dette fordi at det er muligt at opdatere sagen med et felt, men hvis det betyder at alle andre felter sættes til null og vi derfor kan risikere at fjerne info på en sag
         for key in body:
             if key in sag:
                 

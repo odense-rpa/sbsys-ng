@@ -31,9 +31,25 @@ class SagerClient:
         response = await self.client._post(endpoint, body)
         return response["Results"]
     
-    async def opret_sag(self, part_id: int, sagsskabelon_id:int, sagsbehandler_id: int|None, sagstitel: str, borger_part:bool = True) -> dict:
+    async def opret_sag(self, part_id: int, sagsskabelon_id:int, sagsbehandler_id: int, sagstitel: str, borger_part:bool = True) -> dict:
+        """
+        Opretter en sag ud fra en sagsskabelon.
 
-        #Undersøg dette endpoint når vi har swagger
+        Sagen oprettes med den angivne part som både primær part og eneste
+        initiale sagspart. Parten oprettes som en person som standard, men kan
+        også oprettes som en virksomhed ved at sætte borger_part til False.
+
+        Args:
+            part_id (int): ID på den part, der skal knyttes til sagen.
+            sagsskabelon_id (int): ID på den sagsskabelon, der skal bruges.
+            sagsbehandler_id (int): ID på den sagsbehandler, der skal tildeles sagen.
+            sagstitel (str): Titel på den sag, der oprettes.
+            borger_part (bool): Om parten er en person. Hvis False behandles parten som firma.
+
+        Returns:
+            dict: Den oprettede sag, som returneres fra SBSYS API'et.
+        """
+
         endpoint = "api/v10/sag/template"
 
         part_type = "Person" if borger_part else "Firma"
@@ -51,9 +67,8 @@ class SagerClient:
                 }
             ],
             "SkabelonId": sagsskabelon_id,
+            "SagsbehandlerID": sagsbehandler_id
         }
-        if sagsbehandler_id:
-            body["SagsbehandlerID"] = sagsbehandler_id
 
         return await self.client._post(endpoint, body)
     

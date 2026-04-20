@@ -32,7 +32,7 @@ async def test_opret_sag(sbsys_manager: SbsysClientManager):
         bruger = bruger[0]
         
         #Kommenteret ud for at forhindre fejl opret i drift
-        # response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
+        #response = await sbsys_manager.sager.opret_sag(borger["Id"], skabelon["Id"], bruger["Id"], test_titel)
         response = None
 
     assert response is not None

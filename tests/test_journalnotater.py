@@ -58,7 +58,6 @@ async def test_opret_journalnotater(sbsys_manager: SbsysClientManager):
     assert response["Overskrift"] == notat_overskrift
     assert _normaliser_notat_tekst(response["Note"]) == _normaliser_notat_tekst(notat_indhold)
         
-        #response = None
     #Kommenteret ud, for at undgå man kommer til at oprette i drift.
     assert response2 is not None
     assert response2["Overskrift"] == notat_overskrift

@@ -5,33 +5,11 @@ from sbsys.exceptions import (
     SbsysNotFoundError,
     SbsysValidationError,
 )
-from sbsys.models import (
-    Bruger,
-    Dokument,
-    Erindring,
-    Erindringstype,
-    Journalarknote,
-    Person,
-    Sag,
-    Sagspart,
-    Skabelon,
-    Status,
-)
 
 __all__ = [
-    "Bruger",
-    "Dokument",
-    "Erindring",
-    "Erindringstype",
-    "Journalarknote",
-    "Person",
-    "Sag",
-    "Sagspart",
     "SbsysAuthenticationError",
     "SbsysClient",
     "SbsysError",
     "SbsysNotFoundError",
     "SbsysValidationError",
-    "Skabelon",
-    "Status",
 ]

@@ -1,14 +1,10 @@
+import pytest
 from sbsys.manager import SbsysClientManager
 from sbsys import SbsysClient
 
 async def test_hent_sager(sbsys_manager: SbsysClientManager):
     async with sbsys_manager:
         response = await sbsys_manager.sager.hent_sager_på_borger("111111-1111")
-    assert response is not None
-
-async def test_hent_sager_client(sbsys_client: SbsysClient):
-    async with sbsys_client:
-        response = await sbsys_client.hent_sager("111111-1111")
     assert response is not None
 
 async def test_hent_statusliste(sbsys_manager: SbsysClientManager):
@@ -41,7 +37,7 @@ async def test_opret_sag(sbsys_manager: SbsysClientManager):
 
 async def test_søg_sager(sbsys_manager: SbsysClientManager):
     test_cpr = "111111-1111"
-    test_titel = "Test Titel"
+    test_titel = "Tester Titel"
 
     async with sbsys_manager:
         response = await sbsys_manager.sager.søg_sager(

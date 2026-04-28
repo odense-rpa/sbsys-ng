@@ -1,5 +1,4 @@
 from sbsys.client import SbsysClient
-from sbsys.models import Bruger
 
 class BrugerClient:
     def __init__(self, client: SbsysClient):

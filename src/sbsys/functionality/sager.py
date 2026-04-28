@@ -1,13 +1,12 @@
 from sbsys.client import SbsysClient
 from sbsys.exceptions import SbsysValidationError
-from sbsys.models import Sag
 
 
 class SagerClient:
     def __init__(self, client: SbsysClient):
         self.client = client
 
-    async def hent_sager_på_borger(self, cpr:str) -> list[Sag]:
+    async def hent_sager_på_borger(self, cpr:str) -> list[dict]:
         cpr = self.client._format_cpr(cpr)
         endpoint = "api/sag/search"
         body = {

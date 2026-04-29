@@ -1,6 +1,6 @@
 [project]
 name = "sbsys"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python client for the SbSys case management REST API"
 readme = "README.md"
 authors = [

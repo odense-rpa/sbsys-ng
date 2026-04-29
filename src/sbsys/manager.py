@@ -15,6 +15,7 @@ from .functionality.sagsskabeloner import SkabelonClient
 from .functionality.bruger import BrugerClient
 from .functionality.journalnotater import JournalnotatClient
 from .functionality.erindringer import ErinderingerClient
+from .functionality.dokumenter import DokumenterClient
 
 
 class SbsysClientManager:
@@ -73,6 +74,7 @@ class SbsysClientManager:
         self._bruger_client: Optional[BrugerClient] = None
         self._journalnotat_client: Optional[JournalnotatClient] = None
         self._erindringer_client: Optional[ErinderingerClient] = None
+        self._dokumenter_client: Optional[DokumenterClient] = None
 
     @property
     def client(self) -> SbsysClient:
@@ -130,3 +132,9 @@ class SbsysClientManager:
         if self._erindringer_client is None:
             self._erindringer_client = ErinderingerClient(self.client)
         return self._erindringer_client
+
+    @property
+    def dokumenter(self) -> DokumenterClient:
+        if self._dokumenter_client is None:
+            self._dokumenter_client = DokumenterClient(self.client)
+        return self._dokumenter_client

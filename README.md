@@ -5,7 +5,7 @@ Python-klient til SbSys ESDH-systemets REST API — sagsbehandling, dokumenter, 
 ## Installation
 
 ```bash
-pip install sbsys
+uv add git+https://github.com/odense-rpa/sbsys-ng.git
 ```
 
 ## Brug

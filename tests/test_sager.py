@@ -116,3 +116,27 @@ async def test_tilføj_sagspart(sbsys_manager: SbsysClientManager):
         response = None
 
     assert response is True
+
+async def test_opdater_sags_status(sbsys_manager: SbsysClientManager):
+    test_cpr = "111111-1111"
+    test_titel = "Tester Titel"
+
+    async with sbsys_manager:
+        sager = await sbsys_manager.sager.søg_sager(
+            {
+                "SagsStatusIds": [
+                    6
+                ],
+                "PrimaerPerson":{
+                    "CprNummer":test_cpr
+                },
+                "Titel": test_titel,
+                
+            }
+        )
+        
+        #response = await sbsys_manager.sager.opdater_sagsstatus(sager[0]["Id"], "Afsluttet")
+        response = None
+        
+    assert response is not None
+    assert response["SagsStatus"]["SagsTilstand"] == "Afsluttet"

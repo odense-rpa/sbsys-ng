@@ -124,3 +124,24 @@ class SagerClient:
         response = await self.client._post(endpoint, query)
 
         return response
+    
+    async def opdater_sagsstatus(self, sags_id:str, status_navn:str, kommentar:str = "") -> dict:
+        
+        statusser = await self.hent_statusliste_for_sager()
+        
+        status = next((s for s in statusser if s["Navn"].lower() == status_navn.lower()), None)
+        if status is None:
+            raise SbsysValidationError(f"Status '{status_navn}' findes ikke")
+
+        endpoint = f"api/sag/{sags_id}/status"
+        
+        body = {
+            "SagsStatusID": status["Id"]
+        }
+
+        if kommentar is not "":
+            body["Kommentar"] = kommentar
+        
+        response = await self.client._put(endpoint, body)
+        
+        return response

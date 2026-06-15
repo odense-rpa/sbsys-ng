@@ -1,4 +1,5 @@
 from sbsys.client import SbsysClient
+from sbsys.exceptions import SbsysNotFoundError
 
 class ErinderingerClient:
     def __init__(self, client: SbsysClient):
@@ -49,4 +50,21 @@ class ErinderingerClient:
         
         return response
     
-    
+    async def opdater_erindring(self, erindrings_id: str, body: dict) -> dict:
+        
+        endpoint = f"/api/erindring/{erindrings_id}"
+        
+        erindring = await self.hent_erindring(erindrings_id)
+        
+        if erindring is None or erindring == []:
+            raise SbsysNotFoundError("Erindring ikke fundet")
+        
+        for key in body:
+            if key in erindring:
+                erindring[key] = body[key]
+            else:
+                raise ValueError(f"Fejl {key} feltet kan ikke findes på erindringen")
+
+        opdateret_erindring = await self.client._put(endpoint, erindring)
+        
+        return opdateret_erindring

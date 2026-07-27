@@ -139,7 +139,7 @@ class SagerClient:
             "SagsStatusID": status["Id"]
         }
 
-        if kommentar is not "":
+        if kommentar != "":
             body["Kommentar"] = kommentar
         
         response = await self.client._put(endpoint, body)

@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 import string
 import pytest
 from sbsys.manager import SbsysClientManager
@@ -43,3 +44,21 @@ async def test_opdater_erindring(sbsys_manager: SbsysClientManager):
     
     assert response is not None
     assert response["Beskrivelse"] == ny_beskrivelse
+
+async def test_opret_erindring(sbsys_manager: SbsysClientManager):
+    sags_id = "738100"
+
+    async with sbsys_manager:
+        typer = await sbsys_manager.erindringer.hent_erindringstyper()
+
+        response = await sbsys_manager.erindringer.opret_erindring(
+            sags_id=sags_id,
+            navn="Test oprettet erindring",
+            beskrivelse="Oprettet af test",
+            erindringstype=typer[0]["Navn"],
+            ansvarlig_navn="Robot A",
+            deadline=datetime(2030, 1, 1, 12, 0, 0),
+        )
+
+    assert response is not None
+    assert response["Navn"] == "Test oprettet erindring"

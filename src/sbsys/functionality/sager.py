@@ -145,3 +145,10 @@ class SagerClient:
         response = await self.client._put(endpoint, body)
         
         return response
+    
+    async def hent_ekstra_sagsfelter(self) -> dict:
+        endpoint = f"api/sag/sagsfelter"
+
+        response = await self.client._get(endpoint)
+
+        return response

@@ -5,8 +5,8 @@ import pytest
 from sbsys.manager import SbsysClientManager
 
 async def test_hent_erindringer_på_sag(sbsys_manager: SbsysClientManager):
-    sags_id = "738100"
-       
+    sags_id = ""
+
     async with sbsys_manager:
         response = await sbsys_manager.erindringer.hent_erindringer_på_sag(sags_id)
     
@@ -15,8 +15,8 @@ async def test_hent_erindringer_på_sag(sbsys_manager: SbsysClientManager):
     
 
 async def test_hent_erindring(sbsys_manager: SbsysClientManager):
-    erindrings_id = "809243"
-    
+    erindrings_id = ""
+
     async with sbsys_manager:
         response = await sbsys_manager.erindringer.hent_erindring(erindrings_id)
     
@@ -31,8 +31,8 @@ async def test_hent_erindringstyper(sbsys_manager: SbsysClientManager):
     assert len(respone) > 5
 
 async def test_opdater_erindring(sbsys_manager: SbsysClientManager):
-    erindrings_id = "809243"
-    
+    erindrings_id = ""
+
     async with sbsys_manager:
         ny_beskrivelse = "Dette er en opdateret test beskrivelse " + random.choice(string.ascii_letters)
         
@@ -46,18 +46,25 @@ async def test_opdater_erindring(sbsys_manager: SbsysClientManager):
     assert response["Beskrivelse"] == ny_beskrivelse
 
 async def test_opret_erindring(sbsys_manager: SbsysClientManager):
-    sags_id = "738100"
+    
+    sags_id = ""
 
     async with sbsys_manager:
+
+        sag = await sbsys_manager.sager.hent_sag(sags_id)
+
+        erindinger = await sbsys_manager.erindringer.hent_erindringer_på_sag(sag["Id"])
+
         typer = await sbsys_manager.erindringer.hent_erindringstyper()
 
         response = await sbsys_manager.erindringer.opret_erindring(
             sags_id=sags_id,
             navn="Test oprettet erindring",
             beskrivelse="Oprettet af test",
-            erindringstype=typer[0]["Navn"],
+            erindringstype="Bemærk",
             ansvarlig_navn="Robot A",
             deadline=datetime(2030, 1, 1, 12, 0, 0),
+            synlig_fra=datetime(2030, 1, 1, 12, 0, 0),
         )
 
     assert response is not None

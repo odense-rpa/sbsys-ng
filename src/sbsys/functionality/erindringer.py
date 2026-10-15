@@ -1,3 +1,4 @@
+import json  # TEMP DEBUG - remove
 from datetime import datetime
 
 from sbsys.client import SbsysClient
@@ -104,7 +105,7 @@ class ErinderingerClient:
             SbsysNotFoundError: Hvis ansvarlig eller erindringstypen ikke findes.
             ValueError: Hvis navnet på ansvarlig ikke er entydigt.
         """
-        endpoint = "api/erindring"
+        endpoint = "/api/erindring"
 
         bruger_client = BrugerClient(self.client)
 
@@ -127,16 +128,23 @@ class ErinderingerClient:
 
         opretter = await bruger_client.api_me()
 
+        if opretter is None:
+            raise SbsysNotFoundError(f"Kunne ikke hente bruger")
+
+        opretter = await bruger_client.find_brugere(initialer=opretter["Brugernavn"])
+
         body = {
             "HarDeadline": deadline is not None,
             "Deadline": deadline.strftime(DATO_FORMAT) if deadline else None,
             "SynligFra": synlig_fra.strftime(DATO_FORMAT) if synlig_fra else None,
             "Ansvarlig": {"Id": matches[0]["Id"]},
-            "Opretter": {"Id": opretter["Id"]},
-            "SagId": sags_id,
+            "Opretter": {"Id": opretter[0]["Id"]},
+            "SagId": int(sags_id),
             "ErindringType": {"Id": type_match["Id"]},
             "Beskrivelse": beskrivelse,
             "Navn": navn,
         }
+
+        print(json.dumps(body, indent=2, ensure_ascii=False))  # TEMP DEBUG - remove
 
         return await self.client._post(endpoint, body)

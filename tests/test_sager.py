@@ -140,3 +140,10 @@ async def test_opdater_sags_status(sbsys_manager: SbsysClientManager):
         
     assert response is not None
     assert response["SagsStatus"]["SagsTilstand"] == "Afsluttet"
+
+async def test_hent_sagsfelter(sbsys_manager: SbsysClientManager):
+
+    async with sbsys_manager:
+        felter = await sbsys_manager.sager.hent_ekstra_sagsfelter()
+
+    assert felter is not None

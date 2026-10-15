@@ -145,6 +145,4 @@ class ErinderingerClient:
             "Navn": navn,
         }
 
-        print(json.dumps(body, indent=2, ensure_ascii=False))  # TEMP DEBUG - remove
-
         return await self.client._post(endpoint, body)
